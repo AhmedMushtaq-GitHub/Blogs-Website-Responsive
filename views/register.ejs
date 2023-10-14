@@ -1,0 +1,58 @@
+<html lang="en">
+<%- include("./partials/head.ejs") %>
+
+<body>
+  <%- include("./partials/nav.ejs") %>
+  <div class="loginPage" style="width: 15rem; margin: 0 auto;">
+    <h2>Create new account</h2>
+    <h5>Already have an account ? <a href="/login"><u>Login</u></a></h5>
+    <form id="reg-form">
+        <label for="username">Name :</label><br>
+        <input type="text" id="fname" name="fname"><br>
+        <label for="username">E-mail :</label><br>
+        <input type="text" id="email" name="email"><br>
+        <label for="username">Username :</label><br>
+        <input type="text" id="username" name="username"><br>
+        <label for="pwd">Password :</label><br>
+        <input type="password" id="password" name="pasword"><br><br>
+        <input type="submit" value="Create Account">
+    </form>
+
+    <script>
+        const form = document.getElementById('reg-form');
+        form.addEventListener('submit',registerUser)
+
+      async function registerUser(event) {
+				event.preventDefault()
+				const username = document.getElementById('username').value
+				const password = document.getElementById('password').value
+
+				const result = await fetch('/register', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						username,
+						password
+					})
+				}).then((res) => res.json())
+
+				if (result.status === 'ok') {
+					// everythign went fine
+					window.location.href='/blogs';
+         
+				}else if(result.status === 'present'){
+          window.location.href='/login';
+        } else {
+					alert(result.error)
+				}
+			}
+    </script>
+    
+  </div>
+  
+
+  <%- include("./partials/footer.ejs") %>
+</body>
+</html>

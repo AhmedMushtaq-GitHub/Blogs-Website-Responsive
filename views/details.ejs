@@ -1,0 +1,48 @@
+<html lang="en">
+<%- include("./partials/head.ejs") %>
+
+<body>
+  <%- include("./partials/nav.ejs") %>
+
+  <div class="details content">
+    <h2><%= blog.title %></h2>
+    <h4><%= blog.snippet %></h4>
+    <div class="content">
+      
+      <p><%= blog.body %></p>
+    </div>
+    <a id="edit" data-doc="<%= blog._id %>">
+      <img src="/icons8-edit.svg" alt="edit icon">
+    </a>
+    <a class="delete" data-doc="<%= blog._id %>">
+      <img src="/trashcan.svg" alt="delete icon">
+    </a>
+  </div>
+
+  <%- include("./partials/footer.ejs") %>
+
+  <script>
+    
+    document.getElementById('account').innerHTML="Logout";
+    const trashcan = document.querySelector('a.delete');
+    const edit = document.getElementById('edit');
+
+    trashcan.addEventListener('click', (e) => {
+      const endpoint = `/blogs/${trashcan.dataset.doc}`;
+
+      fetch(endpoint, {
+        method: 'DELETE',
+      })
+      .then(response => response.json())
+      .then(data => window.location.href = data.redirect)
+      .catch(err => console.log(err));
+    });
+
+    edit.addEventListener('click', (e) =>{
+      const endpoint = `/edit/${edit.dataset.doc}`;
+      window.location.href=endpoint;
+    })
+    
+  </script>
+</body>
+</html>
